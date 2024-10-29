@@ -1,0 +1,14 @@
+
+
+# Dependency directory
+/node_modules
+/.env
+
+
+
+# Compile code store
+/dist
+/build
+
+/sync_code.sh
+/src/assets/frontImages
