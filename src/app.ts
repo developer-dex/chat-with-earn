@@ -3,25 +3,21 @@ import cors from "cors";
 import AppConfig from "./config/appConfig";
 import MainRoute from "./routers";
 import bodyParser from "body-parser";
-import connectWebsiteDatabase, {
-    connectClientDatabase,
-} from "./config/databaseConfig";
+import connectWebsiteDatabase from "./config/databaseConfig";
+import http from "http";
+import SocketService from "./services/socket.service";
 
 /**
  * Make express app
  */
 const app: express.Application = express();
-app.set("view engine", "ejs");
+const server = http.createServer(app);
+const socketService = new SocketService(server);
 
 /**
  * Website Database Connection
  */
 connectWebsiteDatabase();
-
-/**
- * Client Database Connection
- */
-// connectClientDatabase();
 
 app.use(bodyParser.json({ type: "application/json", limit: "100mb" }));
 app.use(bodyParser.urlencoded({ limit: "100mb", extended: true }));
@@ -52,6 +48,12 @@ app.use((err, req, res, next) => {
  */
 app.listen(AppConfig.port, () => {
     console.log(`Application is running on PORT ${Number(AppConfig.port)}`);
-});
+    server.listen(AppConfig.socketPort, () => {
+        console.log(`Socket server is running on PORT ${Number(AppConfig.socketPort)}`);
+    });
+    // new SocketService(server);
+})
+
+
 
 export default app;
