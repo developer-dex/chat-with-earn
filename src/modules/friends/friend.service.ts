@@ -1,4 +1,4 @@
-import { formatTimeAgo, randomNumberFrom1To10, randomText } from "../../helpers/util";
+import { formatTimeAgo, getRandomDate, randomNumberFrom1To10, randomText } from "../../helpers/util";
 import User from "../../models/User";
 
 
@@ -16,7 +16,7 @@ export class FriendService {
                 _id: friend._id,
                 unread_count: randomNumberFrom1To10(),
                 last_message: randomText(),
-                last_message_at: formatTimeAgo(new Date()),
+                last_message_at: formatTimeAgo(getRandomDate()),
             };
         });
 

@@ -94,7 +94,7 @@ export const formatTimeAgo = (date: Date) => {
         if (interval > 1) return `${interval} hours ago`;
         interval = Math.floor(seconds / 60);
         if (interval > 1) return `${interval} minutes ago`;
-        return `${seconds} seconds ago`;
+        return `Just now`;
     }
 };
 
@@ -113,3 +113,10 @@ export const randomText = () => {
     const randomIndex = Math.floor(Math.random() * messages.length);
     return messages[randomIndex];
 }
+
+export const getRandomDate = () => {
+    const start = new Date();
+    const end = new Date(start);
+    end.setDate(start.getDate() - 30);
+    return new Date(start.getTime() - Math.random() * (start.getTime() - end.getTime()));
+};
