@@ -11,6 +11,7 @@ import { contactUsRequest } from "../modules/contactUs/contactUs.validation";
 import { authController } from "../modules/authentication/auth.controller";
 import { AuthMiddleware } from "../middlewares/auth.middleware";
 import { profileController } from "../modules/profile/profile.controller";
+import { friendController } from "../modules/friends/friend.controller";
 
 const validator = createValidator({ passError: true });
 
@@ -55,5 +56,7 @@ WebsiteApi.get(
     authMiddleware.verifyjwtToken,
     profileController.profileInfo
 );
+
+WebsiteApi.get("/friends", authMiddleware.verifyjwtToken, friendController.friends);
 
 export default WebsiteApi;

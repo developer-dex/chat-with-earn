@@ -1,5 +1,7 @@
 import { Server } from "socket.io";
 import ChatMessage from "../models/ChatMessage";
+import jwt from "jsonwebtoken";
+import getEnvVar from "../helpers/util";
 
 class SocketService {
     private io: Server;
@@ -18,6 +20,11 @@ class SocketService {
 
     private initializeSocketEvents() {
         this.io.on("connection", (socket) => {
+            const authToken = socket.handshake.query.auth_token as string;
+        console.log("Auth Token:", authToken);
+        const decoded = jwt.verify(authToken, getEnvVar("JWT_SECRETKEY"));
+        console.log("decoded___", decoded)
+            // req.token_payload = decoded;
             console.log("New client connected:", socket.id);
 
             socket.on("sendMessage", async (data) => {
