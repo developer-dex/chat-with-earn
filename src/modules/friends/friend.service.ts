@@ -15,9 +15,13 @@ export class FriendService {
                 _id: friend._id,
                 unread_count: 0,
                 last_message: "No messages",
-                last_message_at: formatTimeAgo(new Date(new Date().getTime() - 1000 * 60 * 60 * 74)),
+                last_message_at: formatTimeAgo(new Date()),
             };
         });
-        return friends;
+
+        // Remove the user with the matching _id
+        const filteredFriends = friends.filter(friend => friend._id.toString() !== userId);
+
+        return filteredFriends; // Return the filtered list
     };
 }
