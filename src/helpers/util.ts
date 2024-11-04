@@ -97,3 +97,19 @@ export const formatTimeAgo = (date: Date) => {
         return `${seconds} seconds ago`;
     }
 };
+
+export const randomNumberFrom1To10 = () => {
+    return Math.floor(Math.random() * 10) + 1;
+}
+
+export const randomText = () => {
+    const messages = [
+        "Hello, how are you?",
+        "I am fine, thank you!",
+        "Hope you're having a great day!",
+        "What are your plans for today?",
+        "It's nice to connect with you!"
+    ];
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    return messages[randomIndex];
+}
