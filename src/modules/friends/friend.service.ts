@@ -1,33 +1,3 @@
-// import { formatTimeAgo, getRandomDate, randomNumberFrom1To10, randomText } from "../../helpers/util";
-// import User from "../../models/User";
-
-
-// export class FriendService {
-//     friendList = async (userId: string) => {
-//         console.log(userId);    
-//         const data = await User.find({})
-//         // append the unread_count, last_message, last_message_at
-//         let count = 1;
-//         const friends = data.map((friend) => {
-//             return {
-//                 first_name: friend.first_name,
-//                 last_name: friend.last_name,
-//                 profile_picture: friend.profile_picture,
-//                 _id: friend._id,
-//                 unread_count: randomNumberFrom1To10(),
-//                 last_message: randomText(),
-//                 last_message_at: formatTimeAgo(getRandomDate()),
-//             };
-//         });
-
-//         // Remove the user with the matching _id
-//         const filteredFriends = friends.filter(friend => friend._id.toString() !== userId);
-
-//         return filteredFriends; // Return the filtered list
-//     };
-// }
-
-// src/modules/friends/friend.service.ts
 import { formatTimeAgo } from "../../helpers/util";
 import User from "../../models/User";
 import ChatMessage from "../../models/ChatMessage"; // Import ChatMessage model
@@ -88,5 +58,21 @@ export class FriendService {
         const filteredFriends = friends.filter(friend => friend._id.toString() !== userId);
 
         return filteredFriends; // Return the filtered list
+    };
+
+    // New method to get messages between senderId and receiverId
+    getMessagesBetween = async (senderId: string, receiverId: string) => {
+        console.log(`Fetching messages between ${senderId} and ${receiverId}`); // Debugging log
+
+        const messages = await ChatMessage.find({
+            $or: [
+                { senderId, receiverId },
+                { senderId: receiverId, receiverId: senderId }
+            ]
+        }).sort({ timestamp: 1 }); // Sort messages in ascending order by timestamp
+
+        console.log(`Messages found: ${JSON.stringify(messages)}`); // Debugging log
+
+        return messages; // Return the list of messages
     };
 }

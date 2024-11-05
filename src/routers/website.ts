@@ -58,5 +58,6 @@ WebsiteApi.get(
 );
 
 WebsiteApi.get("/friends", authMiddleware.verifyjwtToken, friendController.friends);
+WebsiteApi.get("/messages", authMiddleware.verifyjwtToken, friendController.getMessagesBetween);
 
 export default WebsiteApi;
