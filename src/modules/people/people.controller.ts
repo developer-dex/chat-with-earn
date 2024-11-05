@@ -14,8 +14,8 @@ export class PeopleController {
     people = async(req: Request & { token_payload?: any }, res: Response, next: NextFunction) => {
         try {
             const token_payload = req.token_payload;
-            const { page, limit } = req.query;
-            const people = await this.peopleService.peopleList(token_payload.data._id, page as string, limit as string);
+            const { page, limit, collage, area, age, gender } = req.query;
+            const people = await this.peopleService.peopleList(token_payload.data._id, page as string, limit as string, collage as string, area as string, age as string, gender as string);
             return res
                 .status(200)
                 .send(

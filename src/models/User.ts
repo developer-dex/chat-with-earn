@@ -53,6 +53,11 @@ const UserSchema = new mongoose.Schema(
             required: false,
             default: null,
         },
+        gender: {
+            type: String,
+            required: false,
+            default: null,
+        },
         block_by_admin: {
             type: Boolean,
             default: false,
