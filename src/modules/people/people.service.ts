@@ -44,6 +44,7 @@ export class PeopleService {
 
         // Add the specified fields to the response
         const response = filteredPeople.map(person => ({
+            user_id: person._id,
             collage: person.collage_name,
             gender: person.gender,
             age: person.dob ? new Date().getFullYear() - person.dob.getFullYear() : null, // Calculate age
