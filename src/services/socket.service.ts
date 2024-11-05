@@ -22,17 +22,19 @@ class SocketService {
 
     private initializeSocketEvents() {
         this.io.on("connection", async (socket) => {
-            console.log("socket.id", socket.id)
+            console.log("socket.id", socket.id);
             const authToken = socket?.handshake?.query?.auth_token as string;
-            if(!authToken) return;
+            if (!authToken) return;
             const decoded: any = jwt.verify(
                 authToken,
                 getEnvVar("JWT_SECRETKEY")
             );
 
-            await User.findByIdAndUpdate(decoded.data._id, { $set: { last_seen: new Date() } });
+            await User.findByIdAndUpdate(decoded.data._id, {
+                $set: { last_seen: new Date(), is_active: true },
+            });
 
-            console.log("decoded___", decoded)
+            console.log("decoded___", decoded);
 
             await this.addSocketIdToUser(decoded.data._id, socket.id);
             this.userSocketMap.set(decoded.data._id, socket.id);
@@ -58,10 +60,14 @@ class SocketService {
 
             socket.on("disconnect", async () => {
                 console.log("Client disconnected:", socket);
-                console.log("decoded.data._id", decoded)
+                console.log("decoded.data._id", decoded);
                 //update last seen
-                await User.findByIdAndUpdate(decoded.data._id, { $set: { last_seen: new Date() } });
-                this.userSocketMap.delete(decoded.data._id);
+                if (decoded.data._id) {
+                    await User.findByIdAndUpdate(decoded.data._id, {
+                        $set: { last_seen: new Date(), is_active: false },
+                    });
+                    this.userSocketMap.delete(decoded.data._id);
+                }
             });
         });
     }

@@ -16,12 +16,7 @@ export class PeopleService {
         // Add filters to the count query if they are provided
         if (collage) queryCount.collage_name = { $regex: new RegExp(collage, 'i') }; // Case insensitive
         if (area) queryCount.area = { $regex: new RegExp(area, 'i') }; // Case insensitive
-        if (age) {
-            const currentDate = new Date();
-            const minDate = new Date(currentDate.getFullYear() - parseInt(age), currentDate.getMonth(), currentDate.getDate());
-            const maxDate = new Date(currentDate.getFullYear() - parseInt(age) + 1, currentDate.getMonth(), currentDate.getDate());
-            queryCount.dob = { $gte: minDate, $lt: maxDate }; // Assuming 'dob' is the field name in your User schema
-        }
+        if (age) queryCount.age = parseInt(age);
         if (gender) queryCount.gender = gender;
 
         const totalPeople = await User.count(queryCount);
@@ -35,12 +30,7 @@ export class PeopleService {
         // Add filters to the query if they are provided
         if (collage) query.collage_name = { $regex: new RegExp(collage, 'i') }; // Case insensitive
         if (area) query.area = { $regex: new RegExp(area, 'i') }; // Case insensitive
-        if (age) {
-            const currentDate = new Date();
-            const minDate = new Date(currentDate.getFullYear() - parseInt(age), currentDate.getMonth(), currentDate.getDate());
-            const maxDate = new Date(currentDate.getFullYear() - parseInt(age) + 1, currentDate.getMonth(), currentDate.getDate());
-            query.dob = { $gte: minDate, $lt: maxDate }; // Assuming 'dob' is the field name in your User schema
-        }
+        if (age) query.age = parseInt(age);
         if (gender) query.gender = { $regex: new RegExp(gender, 'i') };
 
         console.log("query", query);
@@ -59,8 +49,8 @@ export class PeopleService {
             age: person.dob ? new Date().getFullYear() - person.dob.getFullYear() : null, // Calculate age
             first_name: person.first_name,
             last_name: person.last_name,
-            is_status: person.is_active,
-            amount: 100 // Static amount
+            is_active: person.is_active,
+            amount: '+100' // Static amount
         }));
 
         return { people: response, total_count: totalPeople };
