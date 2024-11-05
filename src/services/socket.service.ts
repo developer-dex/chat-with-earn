@@ -30,6 +30,8 @@ class SocketService {
                 getEnvVar("JWT_SECRETKEY")
             );
 
+            await User.findByIdAndUpdate(decoded.data._id, { $set: { last_seen: new Date() } });
+
             console.log("decoded___", decoded)
 
             await this.addSocketIdToUser(decoded.data._id, socket.id);
@@ -54,8 +56,11 @@ class SocketService {
                     .emit("receiveMessage", chatMessage);
             });
 
-            socket.on("disconnect", () => {
-                console.log("Client disconnected:", socket.id);
+            socket.on("disconnect", async () => {
+                console.log("Client disconnected:", socket);
+                console.log("decoded.data._id", decoded)
+                //update last seen
+                await User.findByIdAndUpdate(decoded.data._id, { $set: { last_seen: new Date() } });
                 this.userSocketMap.delete(decoded.data._id);
             });
         });
