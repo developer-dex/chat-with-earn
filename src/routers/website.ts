@@ -12,6 +12,7 @@ import { authController } from "../modules/authentication/auth.controller";
 import { AuthMiddleware } from "../middlewares/auth.middleware";
 import { profileController } from "../modules/profile/profile.controller";
 import { friendController } from "../modules/friends/friend.controller";
+import { peopleController } from "../modules/people/people.controller";
 
 const validator = createValidator({ passError: true });
 
@@ -59,5 +60,7 @@ WebsiteApi.get(
 
 WebsiteApi.get("/friends", authMiddleware.verifyjwtToken, friendController.friends);
 WebsiteApi.get("/messages", authMiddleware.verifyjwtToken, friendController.getMessagesBetween);
+
+WebsiteApi.get("/people", authMiddleware.verifyjwtToken, peopleController.people);
 
 export default WebsiteApi;

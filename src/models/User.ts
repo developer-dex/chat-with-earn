@@ -63,6 +63,11 @@ const UserSchema = new mongoose.Schema(
             require: null,
             default: null,
         },
+        approved_by_admin: {
+            type: Boolean,
+            default: false,
+            require: false,
+        },
         is_active: {
             type: Boolean,
             required: false,

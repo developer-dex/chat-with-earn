@@ -51,7 +51,7 @@ export class FriendService {
                 unread_count: friendMessages[friendId].unread_count,
                 last_message: friendMessages[friendId].last_message,
                 last_message_at: formatTimeAgo(friendMessages[friendId].last_message_at), // Format timestamp
-                last_seen: user ? formatTimeAgo(user.last_seen)  : null,
+                last_seen: user && user.last_seen ? formatTimeAgo(user.last_seen)  : null,
             };
         });
 
