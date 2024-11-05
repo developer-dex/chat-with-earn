@@ -46,12 +46,8 @@ app.use((err, req, res, next) => {
 /**
  *  App Listing
  */
-app.listen(AppConfig.port, () => {
+server.listen(AppConfig.port, () => {
     console.log(`Application is running on PORT ${Number(AppConfig.port)}`);
-    server.listen(AppConfig.socketPort, () => {
-        console.log(`Socket server is running on PORT ${Number(AppConfig.socketPort)}`);
-    });
-    // new SocketService(server);
 })
 
 

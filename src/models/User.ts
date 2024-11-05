@@ -68,6 +68,11 @@ const UserSchema = new mongoose.Schema(
             required: false,
             default: false,
         },
+        socket_id: {
+            type: String,
+            required: false,
+            default: null,
+        },
         take_subscription: {
             type: Boolean,
             default: false,
