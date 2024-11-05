@@ -51,7 +51,8 @@ export class PeopleService {
             first_name: person.first_name,
             last_name: person.last_name,
             is_active: person.is_active,
-            amount: '+100' // Static amount
+            amount: '+100',
+            area: person.area,
         }));
 
         return { people: response, total_count: totalPeople };
