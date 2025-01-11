@@ -61,7 +61,7 @@ export class PeopleService {
 
     careerPeopleList = async ( page: number, limit: number, search: string) => {
         const { offset, limit: limitData } = calculatePagination(page, limit);
-        let query: any
+        let query: any;
 
         if (search) {
             query = {
@@ -77,6 +77,10 @@ export class PeopleService {
         const people = await User.find(query)
             .skip(offset)
             .limit(limitData);
-        return people;
+
+        // Get total count of people matching the query
+        const totalCount = await User.count(query);
+
+        return { people, total_count: totalCount }; // Return people and total count
     }
 }
