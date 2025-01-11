@@ -13,10 +13,13 @@ import { AuthMiddleware } from "../middlewares/auth.middleware";
 import { profileController } from "../modules/profile/profile.controller";
 import { friendController } from "../modules/friends/friend.controller";
 import { peopleController } from "../modules/people/people.controller";
+import { FileUploadMiddleware } from "../middlewares/fileupload.middleware";
 
 const validator = createValidator({ passError: true });
 
 const authMiddleware = new AuthMiddleware();
+
+const fileUploadMiddleware = new FileUploadMiddleware();
 
 const WebsiteApi: Router = Router();
 
@@ -62,5 +65,9 @@ WebsiteApi.get("/friends", authMiddleware.verifyjwtToken, friendController.frien
 WebsiteApi.get("/messages", authMiddleware.verifyjwtToken, friendController.getMessagesBetween);
 
 WebsiteApi.get("/people", authMiddleware.verifyjwtToken, peopleController.people);
+
+WebsiteApi.get("/career-people-list", peopleController.careerPeopleList);
+
+WebsiteApi.patch("/update-profile", authMiddleware.verifyjwtToken, fileUploadMiddleware.uploadUserProfile, profileController.updateProfile);
 
 export default WebsiteApi;

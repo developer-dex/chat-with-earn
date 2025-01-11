@@ -1,4 +1,8 @@
 import "dotenv/config";
+import moment from "moment";
+import multer from "multer";
+
+
 export default function getEnvVar(envVarName: string | number): string {
     const value = process.env[envVarName];
 
@@ -119,4 +123,25 @@ export const getRandomDate = () => {
     const end = new Date(start);
     end.setDate(start.getDate() - 30);
     return new Date(start.getTime() - Math.random() * (start.getTime() - end.getTime()));
+};
+
+export const calculatePagination = (page: number, limit: number) => {
+    const offset = (page - 1) * limit;
+    return { offset, limit };
+};
+
+export const createMulterMiddleware = (uploadPath: string) => {
+    // ... existing code ...
+
+    const storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, uploadPath);
+        },
+        filename: function (req, file, cb) {
+            const timestamp = moment().format("YYYYMMDD_HHmmss"); // Get current timestamp
+            cb(null, `${timestamp}_${file.originalname}`); // Append timestamp to original file name
+        },
+    });
+
+    return multer({ storage: storage });
 };

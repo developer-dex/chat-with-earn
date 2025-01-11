@@ -44,6 +44,18 @@ export class ProfileController {
                 );
         }
     };
+
+    updateProfile = async (req: any & { token_payload?: any }, res: Response, next: NextFunction) => {
+        const token_payload = req.token_payload;
+        const profileData = req.body;
+        const profileImage = req.file;
+
+        try {
+            const profile = await this.profileService.updateProfile(token_payload.data._id, profileData, profileImage);
+        } catch (error) {
+            return res.status(200).send(this.responseService.responseWithoutData(false, StatusCodes.INTERNAL_SERVER_ERROR, "Internal server error"));
+        }
+    }
 }
 
 export const profileController = new ProfileController();

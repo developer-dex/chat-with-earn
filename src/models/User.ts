@@ -8,6 +8,11 @@ const UserSchema = new mongoose.Schema(
             require: false,
             default: "",
         },
+        total_earnings: {
+            type: Number,
+            require: false,
+            default: 0,
+        },
         last_name: {
             type: String,
             require: false,
@@ -94,6 +99,22 @@ const UserSchema = new mongoose.Schema(
         last_seen: {
             type: Date,
             default: null,
+        },
+        people_count: {
+            type: Number,
+            default: 0,
+        },
+        profile_image: {
+            type: String,
+            default: "",
+        },
+        referral_code: {
+            type: String,
+            required: false,
+            // default randome string which is unique for every user and it must be 7 character long
+            default: () => {
+                return Math.random().toString(36).substring(2, 9);
+            }
         }
     },
     {

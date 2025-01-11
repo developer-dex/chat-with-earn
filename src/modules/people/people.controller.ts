@@ -31,6 +31,26 @@ export class PeopleController {
             return res.status(500).send(this.responseService.responseWithoutData(true, StatusCodes.INTERNAL_SERVER_ERROR, "Internal server error."));
         }
     }
+
+    careerPeopleList = async(req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { page, limit, search  } = req.query;
+            const people = await this.peopleService.careerPeopleList(Number(page), Number(limit), search as string);
+            return res
+                .status(200)
+                .send(
+                    this.responseService.responseWithData(
+                        false,
+                        StatusCodes.OK,
+                        "Career people list fetched successfully.",
+                        people
+                    )
+                );
+        } catch (error) {
+            console.log("error", error)
+            return res.status(500).send(this.responseService.responseWithoutData(true, StatusCodes.INTERNAL_SERVER_ERROR, "Internal server error."));
+        }
+    }
 }
 
 export const peopleController = new PeopleController();

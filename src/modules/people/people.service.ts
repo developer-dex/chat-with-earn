@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import User from "../../models/User";
+import { calculatePagination } from "../../helpers/util";
 
 
 export class PeopleService {
@@ -56,5 +57,26 @@ export class PeopleService {
         }));
 
         return { people: response, total_count: totalPeople };
+    }
+
+    careerPeopleList = async ( page: number, limit: number, search: string) => {
+        const { offset, limit: limitData } = calculatePagination(page, limit);
+        let query: any
+
+        if (search) {
+            query = {
+                $or: [
+                    { first_name: { $regex: new RegExp(search, 'i') } },
+                    { last_name: { $regex: new RegExp(search, 'i') } },
+                ]
+            };
+        }
+
+        console.log("query", query);
+
+        const people = await User.find(query)
+            .skip(offset)
+            .limit(limitData);
+        return people;
     }
 }
