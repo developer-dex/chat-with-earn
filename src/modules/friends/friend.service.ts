@@ -34,7 +34,7 @@ export class FriendService {
                     friendMessages[friendId.toString()].last_message = message.message;
                     friendMessages[friendId.toString()].last_message_at = message.timestamp;
                     if (message.receiverId.toString() === userId) {
-                        friendMessages[friendId.toString()].unread_count += 1; // Increment unread count
+                        friendMessages[friendId.toString()].unread_count; // Increment unread count
                     }
                 }
             }
@@ -78,9 +78,14 @@ export class FriendService {
     };
 
     messageCountRead = async (reciverId: string, userId: string) => {
+        console.log("reciverId", reciverId);
+        console.log("userId", userId);
         // await ChatMessage.updateMany({ receiverId: reciverId, senderId: userId }, { $set: { receiverUnreadCount: 0 } });
 
         await ChatMessage.updateMany({ senderId: reciverId, receiverId: userId }, { $set: { receiverUnreadCount: 0 } });
+
+        // delete all the messge
+        // await ChatMessage.deleteMany({createdAt: {$lt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7)}});
         return true;
     }
 }
