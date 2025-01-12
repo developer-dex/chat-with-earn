@@ -72,7 +72,7 @@ WebsiteApi.patch("/update-profile", authMiddleware.verifyjwtToken, fileUploadMid
 
 // message count read
 
-WebsiteApi.get("/message-read", authMiddleware.verifyjwtToken, friendController.messageCountRead);
+WebsiteApi.patch("/message-read", authMiddleware.verifyjwtToken, friendController.messageCountRead);
 
 export default WebsiteApi;
 

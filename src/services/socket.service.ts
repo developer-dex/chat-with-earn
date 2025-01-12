@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
 import ChatMessage from "../models/ChatMessage";
 import jwt from "jsonwebtoken";
-import getEnvVar from "../helpers/util";
+import getEnvVar, { formatTimeAgo } from "../helpers/util";
 import User from "../models/User";
 
 class SocketService {
@@ -58,8 +58,13 @@ class SocketService {
                     .to(receiverSocketId)
                     .emit("receiveMessage", chatMessage);
 
-                // data send to user emil
-                // this.io.to(senderId).emit("sendMessage", chatMessage);
+                const senderSocketId = this.userSocketMap.get(senderId);
+                const updatedMessage = {
+                    message: chatMessage.message,
+                    last_message_at: formatTimeAgo(chatMessage.timestamp),
+                    senderUnreadCount: chatMessage.senderUnreadCount,
+                }
+                this.io.to(senderSocketId).emit("updateSenderMessage", updatedMessage);
             });
 
             socket.on("disconnect", async () => {
