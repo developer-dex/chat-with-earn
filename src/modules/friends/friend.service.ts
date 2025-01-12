@@ -34,7 +34,7 @@ export class FriendService {
                     friendMessages[friendId.toString()].last_message = message.message;
                     friendMessages[friendId.toString()].last_message_at = message.timestamp;
                     if (message.receiverId.toString() === userId) {
-                        friendMessages[friendId.toString()].unread_count; // Increment unread count
+                        friendMessages[friendId.toString()].unread_count = friendMessages[friendId.toString()].unread_count > 0 ? friendMessages[friendId.toString()].unread_count + 1 : friendMessages[friendId.toString()].unread_count; // Increment unread count
                     }
                 }
             }
