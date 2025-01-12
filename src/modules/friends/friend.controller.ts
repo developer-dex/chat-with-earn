@@ -48,8 +48,8 @@ export class FriendController {
     messageCountRead = async (req: Request & { token_payload?: any }, res: Response, next: NextFunction) => {
         try {
             const token_payload = req.token_payload;
-            const { reciverId } = req.body;
-            const messages = await this.friendService.messageCountRead(reciverId, token_payload.data._id);
+            const { receiverId } = req.body;
+            const messages = await this.friendService.messageCountRead(receiverId, token_payload.data._id);
             return res.status(200).send(this.responseService.responseWithData(false, StatusCodes.OK, "Messages fetched successfully.", messages));
         } catch (error) {
             return res.status(500).send(this.responseService.responseWithoutData(true, StatusCodes.INTERNAL_SERVER_ERROR, "Internal server error."));

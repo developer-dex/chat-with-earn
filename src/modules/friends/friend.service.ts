@@ -34,7 +34,7 @@ export class FriendService {
                     friendMessages[friendId.toString()].last_message = message.message;
                     friendMessages[friendId.toString()].last_message_at = message.timestamp;
                     if (message.receiverId.toString() === userId) {
-                        friendMessages[friendId.toString()].unread_count = friendMessages[friendId.toString()].unread_count > 0 ? friendMessages[friendId.toString()].unread_count + 1 : friendMessages[friendId.toString()].unread_count; // Increment unread count
+                        friendMessages[friendId.toString()].unread_count = message.receiverUnreadCount > 0 ? friendMessages[friendId.toString()].unread_count + 1 : 0; // Increment unread count
                     }
                 }
             }
@@ -77,12 +77,11 @@ export class FriendService {
         return messages; // Return the list of messages
     };
 
-    messageCountRead = async (reciverId: string, userId: string) => {
-        console.log("reciverId", reciverId);
-        console.log("userId", userId);
-        // await ChatMessage.updateMany({ receiverId: reciverId, senderId: userId }, { $set: { receiverUnreadCount: 0 } });
+    messageCountRead = async (receiverId: string, userId: string) => {
+       
+        // await ChatMessage.updateMany({ receiverId: receiverId, senderId: userId }, { $set: { receiverUnreadCount: 0 } });
 
-        await ChatMessage.updateMany({ senderId: reciverId, receiverId: userId }, { $set: { receiverUnreadCount: 0 } });
+        await ChatMessage.updateMany({ senderId: receiverId, receiverId: userId }, { $set: { receiverUnreadCount: 0 } });
 
         // delete all the messge
         // await ChatMessage.deleteMany({createdAt: {$lt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7)}});
