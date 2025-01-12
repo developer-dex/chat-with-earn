@@ -48,6 +48,7 @@ class SocketService {
                     senderId,
                     receiverId,
                     message,
+                    receiverUnreadCount: 1,
                 });
                 await chatMessage.save();
 
@@ -56,6 +57,9 @@ class SocketService {
                 this.io
                     .to(receiverSocketId)
                     .emit("receiveMessage", chatMessage);
+
+                // data send to user emil
+                // this.io.to(senderId).emit("sendMessage", chatMessage);
             });
 
             socket.on("disconnect", async () => {

@@ -27,7 +27,7 @@ export class FriendService {
                     friendMessages[friendId.toString()] = {
                         last_message: message.message,
                         last_message_at: message.timestamp,
-                        unread_count: message.receiverId.toString() === userId ? 1 : 0, // Increment unread count if the user is the receiver
+                        unread_count: (message.receiverId.toString() === userId && message.receiverUnreadCount > 0) ? message.receiverUnreadCount : 0, // Increment unread count if the user is the receiver
                     };
                 } else {
                     // Update last message and timestamp
@@ -76,4 +76,11 @@ export class FriendService {
 
         return messages; // Return the list of messages
     };
+
+    messageCountRead = async (reciverId: string, userId: string) => {
+        // await ChatMessage.updateMany({ receiverId: reciverId, senderId: userId }, { $set: { receiverUnreadCount: 0 } });
+
+        await ChatMessage.updateMany({ senderId: reciverId, receiverId: userId }, { $set: { receiverUnreadCount: 0 } });
+        return true;
+    }
 }

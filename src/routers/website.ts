@@ -70,4 +70,9 @@ WebsiteApi.get("/career-people-list", peopleController.careerPeopleList);
 
 WebsiteApi.patch("/update-profile", authMiddleware.verifyjwtToken, fileUploadMiddleware.uploadUserProfile, profileController.updateProfile);
 
+// message count read
+
+WebsiteApi.get("/message-read", authMiddleware.verifyjwtToken, friendController.messageCountRead);
+
 export default WebsiteApi;
+

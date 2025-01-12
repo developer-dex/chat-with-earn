@@ -19,6 +19,14 @@ const ChatMessageSchema = new mongoose.Schema({
         type: Date,
         default: null,
     },
+    senderUnreadCount: {
+        type: Number,
+        default: 0,
+    },
+    receiverUnreadCount: {
+        type: Number,
+        default: 0,
+    },
     timestamp: {
         type: Date,
         default: Date.now,
