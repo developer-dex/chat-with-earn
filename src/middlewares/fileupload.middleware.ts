@@ -1,4 +1,4 @@
-import { USER_PROFILE_PATH } from "../helpers/constants";
+import { PAYMENT_QR_CODE_PATH, USER_PROFILE_PATH } from "../helpers/constants";
 import { createMulterMiddleware } from "../helpers/util";
 import { Request, Response, NextFunction } from "express";
 
@@ -20,5 +20,18 @@ export class FileUploadMiddleware {
             next();
         });
     }
-    
+
+    uploadPaymentQrCode = (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) => {
+        const multerMiddleware = createMulterMiddleware(PAYMENT_QR_CODE_PATH);
+        multerMiddleware.single("image")(req, res, (err) => {
+            if (err) {
+                return res.status(400).json({ message: "File upload failed", error: err });
+            }
+            next();
+        });
+    }
 }

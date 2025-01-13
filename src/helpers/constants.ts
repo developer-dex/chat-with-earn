@@ -5,3 +5,4 @@ export const RESET_PASSWORD_FRONT_URL = getEnvVar('FRONTEND_URL') + "/reset-pass
 
 
 export const USER_PROFILE_PATH = "assets/adminProfiles";
+export const PAYMENT_QR_CODE_PATH = "assets/paymentQrCodes";

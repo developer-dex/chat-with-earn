@@ -1,6 +1,4 @@
-// var mongoose = require('mongoose');
 import mongoose from "mongoose";
-import bcryptjs from "bcryptjs";
 
 const AdminSchema = new mongoose.Schema(
     {
@@ -28,11 +26,6 @@ const AdminSchema = new mongoose.Schema(
         timestamps: true,
     }
 );
-AdminSchema.pre("save", function (next) {
-    console.log("dhruvin");
-    this.password = bcryptjs.hashSync(this.password);
-    next();
-});
 
 const Admin = mongoose.model("Admin", AdminSchema);
 

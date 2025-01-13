@@ -63,6 +63,7 @@ class SocketService {
                     message: chatMessage.message,
                     last_message_at: formatTimeAgo(chatMessage.timestamp),
                     senderUnreadCount: chatMessage.senderUnreadCount,
+                    receiverId: chatMessage.receiverId,
                 }
                 this.io.to(senderSocketId).emit("updateSenderMessage", updatedMessage);
             });
