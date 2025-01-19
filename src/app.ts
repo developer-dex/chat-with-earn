@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import connectWebsiteDatabase from "./config/databaseConfig";
 import http from "http";
 import SocketService from "./services/socket.service";
+import path from "path";
 
 /**
  * Make express app
@@ -13,6 +14,11 @@ import SocketService from "./services/socket.service";
 const app: express.Application = express();
 const server = http.createServer(app);
 const socketService = new SocketService(server);
+
+app.use('/assets', express.static(path.join(__dirname, '../assets')));
+
+console.log("path___", path.join(__dirname, '../@assets'))
+
 
 /**
  * Website Database Connection

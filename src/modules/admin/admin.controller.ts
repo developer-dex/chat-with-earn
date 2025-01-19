@@ -60,30 +60,30 @@ export class AdminController {
 
     chnageTheStatus = async (req: Request & { token_payload?: any }, res: Response, next: NextFunction) => {
         const token_payload = req.token_payload;
-        const { userId, status } = req.body;
+        const { userId } = req.body;
         try {
             /// check the user is exist or not
             const isUserExist = await this.adminService.isExist(userId);
             if (!isUserExist) {
                 return res.status(200).send(this.responseService.responseWithoutData(false, StatusCodes.NOT_FOUND, "User not found"));
             }
-            const user = await this.adminService.changeTheStatus(userId, status);
+            const user = await this.adminService.changeTheStatus(userId, isUserExist.approved_by_admin);
             return res.status(200).send(this.responseService.responseWithData(false, StatusCodes.OK, "Status changed successfully", user));
         } catch (error) {
             return res.status(200).send(this.responseService.responseWithoutData(false, StatusCodes.INTERNAL_SERVER_ERROR, "Internal server error"));
         }
     }
 
-    editProfileAndPeopleAmount = async (req: Request & { token_payload?: any }, res: Response, next: NextFunction) => {
+    editUserProfile = async (req: Request & { token_payload?: any }, res: Response, next: NextFunction) => {
         const token_payload = req.token_payload;
-        const { profiteAmout, peopleCount, userId } = req.body;
+        const { total_earnings, people_count, username, password, userId } = req.body;
         try {
             /// check the user is exist or not
             const isUserExist = await this.adminService.isExist(userId);
             if (!isUserExist) {
                 return res.status(200).send(this.responseService.responseWithoutData(false, StatusCodes.NOT_FOUND, "User not found"));
             }
-            const user = await this.adminService.editProfileAndPeopleAmount(userId, profiteAmout, peopleCount);
+            const user = await this.adminService.editProfileAndPeopleAmount(userId, total_earnings, people_count, username, password);
             return res.status(200).send(this.responseService.responseWithData(false, StatusCodes.OK, "Profile and people amount updated successfully", user));
         } catch (error) {
             return res.status(200).send(this.responseService.responseWithoutData(false, StatusCodes.INTERNAL_SERVER_ERROR, "Internal server error"));
@@ -92,11 +92,22 @@ export class AdminController {
 
     changeThePaymentQrCode = async (req: Request & { token_payload?: any }, res: Response, next: NextFunction) => {
         const token_payload = req.token_payload;
-        const { qrId } = req.body;
         const file = req.file;
         try {
-            const user = await this.adminService.updateThePaymentQrCode(qrId, file);
+            const user = await this.adminService.updateThePaymentQrCode(file);
             return res.status(200).send(this.responseService.responseWithData(false, StatusCodes.OK, "Payment QR code changed successfully", user));
+        } catch (error) {
+            console.log("error", error);
+
+            return res.status(200).send(this.responseService.responseWithoutData(false, StatusCodes.INTERNAL_SERVER_ERROR, "Internal server error"));
+        }
+    }
+
+    getPaymentPhoto = async (req: Request & { token_payload?: any }, res: Response, next: NextFunction) => {
+        const token_payload = req.token_payload;
+        try {
+            const user = await this.adminService.getPaymentPhoto();
+            return res.status(200).send(this.responseService.responseWithData(false, StatusCodes.OK, "Payment photo get successfully", user));
         } catch (error) {
             return res.status(200).send(this.responseService.responseWithoutData(false, StatusCodes.INTERNAL_SERVER_ERROR, "Internal server error"));
         }

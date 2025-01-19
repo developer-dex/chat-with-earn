@@ -13,41 +13,50 @@ export class AdminService {
     }
 
     users = async (page: number, limit: number) => {
-        const users = await User.find({});
-        return users;
+        const skip = (page - 1) * limit;
+        const users = await User.find({}).skip(skip).limit(limit);
+        // return the total count of the users
+        const totalCount = await User.countDocuments({});
+        return { users, total_count: totalCount };
     }
 
-    changeTheStatus = async (userId: string, status: string) => {
-        /// check the user is exist or not
-        const isUserExist = await this.isExist(userId);
-        if (!isUserExist) {
-            throw new Error("User not found");
-        }
-        const user = await User.findByIdAndUpdate(userId, { approved_by_admin: !isUserExist.approved_by_admin });
+    changeTheStatus = async (userId: string, isApprovedByAdmin: boolean) => {
+        console.log(isApprovedByAdmin);
+        const user = await User.findByIdAndUpdate(userId, { approved_by_admin: !isApprovedByAdmin });
         return user;
     }
 
-    editProfileAndPeopleAmount = async (userId: string, profiteAmout: number | null, peopleCount: number | null) => {
-        
-        if (profiteAmout) {
-            const user = await User.findByIdAndUpdate(userId, { total_earnings: profiteAmout });
-            return user;
-        }
-        if (peopleCount) {
-            const user = await User.findByIdAndUpdate(userId, { people_count: peopleCount });
-            return user;
-        }
-        return null;
+    editProfileAndPeopleAmount = async (userId: string, profiteAmout: number | null, peopleCount: number | null, username: string, password: string) => {
+        return await User.findByIdAndUpdate(userId, { total_earnings: profiteAmout, people_count: peopleCount, username: username, password: password });
     }
 
-    updateThePaymentQrCode = async (qrId: string, file: Express.Multer.File) => {
+    updateThePaymentQrCode = async (file: Express.Multer.File) => {
+        console.log("file", file);
 
         // remove the old qr code image
-        const qrCode = await QrCode.findById(qrId);
+        const qrCode = await QrCode.findOne({});
         if (qrCode) {
+            console.log("qrCode", qrCode);
             await FileSystem.unlink(qrCode.qr_code_image);
         }
-        return await QrCode.findByIdAndUpdate(qrId, { qr_code_image: file.path });
+
+        // delete all the from teh database
+        await QrCode.deleteMany({});
+
+        // create new qr code image
+        const newQrCode = new QrCode({
+            qr_code_image: file.path
+        });
+        await newQrCode.save();
+        return newQrCode;
+    }
+
+    getPaymentPhoto = async () => {
+        const qrCode = await QrCode.findOne({});
+        // add base url to the qr code image
+        const baseUrl = process.env.LOCAL_URL;
+        qrCode.qr_code_image = `${baseUrl}/${qrCode?.qr_code_image}`;
+        return qrCode;
     }
 
     isExist = async (userId: string) => {

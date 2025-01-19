@@ -11,8 +11,10 @@ const fileUploadMiddleware = new FileUploadMiddleware();
 
 // AdminDashboardApi.use(authMiddleware.verifyjwtToken);
 AdminDashboardApi.post("/login", adminController.adminLogin);
-AdminDashboardApi.get("/user-list", authMiddleware.verifyjwtToken, adminController.allUsersInformation);
-AdminDashboardApi.patch("/change-status", authMiddleware.verifyjwtToken, adminController.chnageTheStatus);
-AdminDashboardApi.patch("/edit-profile-and-people-amount", authMiddleware.verifyjwtToken, adminController.editProfileAndPeopleAmount);
-AdminDashboardApi.patch("/change-payment-qr-code", authMiddleware.verifyjwtToken, fileUploadMiddleware.uploadPaymentQrCode, adminController.changeThePaymentQrCode);
+AdminDashboardApi.get("/user-list", adminController.allUsersInformation);
+AdminDashboardApi.patch("/change-status", adminController.chnageTheStatus);
+AdminDashboardApi.patch("/edit-user-profile", adminController.editUserProfile);
+AdminDashboardApi.patch("/change-payment-qr-code", fileUploadMiddleware.uploadPaymentQrCode, adminController.changeThePaymentQrCode);
+AdminDashboardApi.get("/payment-photo", adminController.getPaymentPhoto);
+
 export default AdminDashboardApi;
