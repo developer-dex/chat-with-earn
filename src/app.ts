@@ -17,7 +17,6 @@ const socketService = new SocketService(server);
 
 app.use('/assets', express.static(path.join(__dirname, '../assets')));
 
-console.log("path___", path.join(__dirname, '../@assets'))
 
 
 /**

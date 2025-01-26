@@ -4,5 +4,5 @@ export const UPLOAD_PATH = "src/assets/frontImages";
 export const RESET_PASSWORD_FRONT_URL = getEnvVar('FRONTEND_URL') + "/reset-password"
 
 
-export const USER_PROFILE_PATH = "assets/adminProfiles";
+export const USER_PROFILE_PATH = "assets/userProfiles";
 export const PAYMENT_QR_CODE_PATH = "assets/paymentQrCodes";

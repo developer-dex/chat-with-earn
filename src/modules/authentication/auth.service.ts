@@ -23,8 +23,8 @@ export class AuthService {
         this.jwtService = new JwtService();
     }
 
-    login = async (userId: string): Promise<ILoginResponse> => {
-        return this.generateLogInSignUpResponse(userId);
+    login = async (userId: string, profileImageUrl: string): Promise<ILoginResponse> => {
+        return this.generateLogInSignUpResponse(userId, profileImageUrl);
     };
     public async signUp(signUpReqPayload: ISignupRequest) {
         // TODO: implement full signup feature;
@@ -101,7 +101,7 @@ export class AuthService {
         return bcryptjs.compareSync(password, hashedPassword);
     };
 
-    private generateLogInSignUpResponse = (userId: string) => {
+    private generateLogInSignUpResponse = (userId: string, profileImageUrl: string) => {
         let jwtTokenPayload: Record<string, any> = {
             _id: userId,
         };
@@ -109,6 +109,8 @@ export class AuthService {
             authorization_token: this.jwtService.generateToken(jwtTokenPayload),
             user_id: userId,
             redirect_url: getEnvVar("DASHBOARD_URL"),
+            profilr_image: profileImageUrl ? getEnvVar('IMAGE_FRONT_URL') + profileImageUrl : null,
+
         };
     };
 }

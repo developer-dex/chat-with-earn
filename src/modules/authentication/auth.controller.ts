@@ -43,7 +43,8 @@ export class AuthController {
                     );
             }
             const responseData = await this.authService.login(
-                isExistUser._id.toString()
+                isExistUser._id.toString(),
+                isExistUser.profile_image
             );
             return res
                 .status(200)

@@ -1,4 +1,4 @@
-import { formatTimeAgo } from "../../helpers/util";
+import getEnvVar, { formatTimeAgo } from "../../helpers/util";
 import User from "../../models/User";
 import ChatMessage from "../../models/ChatMessage"; // Import ChatMessage model
 
@@ -46,7 +46,7 @@ export class FriendService {
             return {
                 first_name: user ? user.first_name : 'Unknown', // Fallback if user not found
                 last_name: user ? user.last_name : 'User', // Fallback if user not found
-                profile_picture: user ? user.profile_picture : '', // Fallback if user not found
+                profile_picture: user ? getEnvVar('IMAGE_FRONT_URL') + user.profile_image : '', // Fallback if user not found
                 _id: friendId, // Use friendId as _id
                 unread_count: friendMessages[friendId].unread_count,
                 last_message: friendMessages[friendId].last_message,

@@ -1,4 +1,6 @@
+import getEnvVar from "../../helpers/util";
 import User from "../../models/User";
+import fs from "fs";
 
 export class ProfileService {
     constructor() {}
@@ -9,12 +11,15 @@ export class ProfileService {
         return { profileData };
     };
 
-    updateProfile = async (userId: string, profileData: any, profileImage: any) => {
+    updateProfile = async (userId: string, profileImage: any) => {
         const profile = await User.findOne({ _id: userId });
         if (profileImage) {
-            profile.profile_image = profileImage.filename;
+            fs.unlinkSync(profile.profile_image);
+            profile.profile_image = profileImage.path;
         }
         await profile.save();
-        return { profile };
+        const baseUrl = getEnvVar('IMAGE_FRONT_URL');
+        const profileImageUrl = baseUrl + profile.profile_image;
+        return { profileImageUrl };
     }
 }

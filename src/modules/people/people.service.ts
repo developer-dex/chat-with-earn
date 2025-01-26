@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import User from "../../models/User";
-import { calculatePagination } from "../../helpers/util";
+import getEnvVar, { calculatePagination } from "../../helpers/util";
 
 
 export class PeopleService {
@@ -54,6 +54,7 @@ export class PeopleService {
             is_active: person.is_active,
             amount: '+100',
             area: person.area,
+            profile_image: getEnvVar('IMAGE_FRONT_URL') + person.profile_image,
         }));
 
         return { people: response, total_count: totalPeople };
@@ -72,15 +73,18 @@ export class PeopleService {
             };
         }
 
-        console.log("query", query);
-
         const people = await User.find(query)
             .skip(offset)
             .limit(limitData);
 
+        const peopleWithProfileImage = people.map(person => ({
+            ...person,
+            profile_image: person.profile_image ? getEnvVar('IMAGE_FRONT_URL') + person.profile_image : null
+        }));
+
         // Get total count of people matching the query
         const totalCount = await User.count(query);
 
-        return { people, total_count: totalCount }; // Return people and total count
+        return { people: peopleWithProfileImage, total_count: totalCount }; // Return people and total count
     }
 }

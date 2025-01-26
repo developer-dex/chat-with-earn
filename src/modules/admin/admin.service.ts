@@ -54,7 +54,7 @@ export class AdminService {
     getPaymentPhoto = async () => {
         const qrCode = await QrCode.findOne({});
         // add base url to the qr code image
-        const baseUrl = process.env.LOCAL_URL;
+        const baseUrl = process.env.IMAGE_FRONT_URL;
         qrCode.qr_code_image = `${baseUrl}/${qrCode?.qr_code_image}`;
         return qrCode;
     }
