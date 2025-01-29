@@ -13,8 +13,15 @@ import path from "path";
  */
 const app: express.Application = express();
 const server = http.createServer(app);
-const socketService = new SocketService(server);
 
+/**
+ * Initialize socket service
+ */
+new SocketService(server);
+
+/**
+ * Serve static files from assets folder
+ */
 app.use('/assets', express.static(path.join(__dirname, '../assets')));
 
 
@@ -24,8 +31,15 @@ app.use('/assets', express.static(path.join(__dirname, '../assets')));
  */
 connectWebsiteDatabase();
 
+/**
+ * Parse request body
+ */ 
 app.use(bodyParser.json({ type: "application/json", limit: "100mb" }));
 app.use(bodyParser.urlencoded({ limit: "100mb", extended: true }));
+
+/**
+ * Enable cors
+ */
 app.use(cors());
 
 /**
