@@ -8,6 +8,10 @@ export class ProfileService {
     profileInfo = async (userId: string) => {
         // In future subscription data will come in the picture
         const profileData = await User.findOne({ _id: userId });
+        // chage the profile image url
+        const baseUrl = getEnvVar('IMAGE_FRONT_URL');
+        const profileImageUrl = ( profileData.profile_image && profileData.profile_image.length > 0 ) ? baseUrl + profileData.profile_image : null;
+        profileData.profile_image = profileImageUrl;
         return { profileData };
     };
 
