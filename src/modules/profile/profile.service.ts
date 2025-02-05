@@ -16,14 +16,33 @@ export class ProfileService {
     };
 
     updateProfile = async (userId: string, profileImage: any) => {
-        const profile = await User.findOne({ _id: userId });
-        if (profileImage) {
-            fs.unlinkSync(profile.profile_image);
-            profile.profile_image = profileImage.path;
+        try {
+            const profile = await User.findOne({ _id: userId });
+            if (!profile) {
+                throw new Error('Profile not found');
+            }
+
+            if (profileImage) {
+                // Check if profile.profile_image exists and is a valid path before attempting to unlink
+                if (profile.profile_image && fs.existsSync(profile.profile_image)) {
+                    try {
+                        fs.unlinkSync(profile.profile_image);
+                    } catch (error) {
+                        console.error('Error deleting file:', error);
+                        // Handle the error as needed (e.g., log it, notify the user, etc.)
+                    }
+                }
+                profile.profile_image = profileImage.path;
+            }
+
+            await profile.save();
+            const baseUrl = getEnvVar('IMAGE_FRONT_URL');
+            const profileImageUrl = baseUrl + profile.profile_image;
+            return { profileImageUrl };
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            // Return a meaningful error response
+            throw new Error('Failed to update profile');
         }
-        await profile.save();
-        const baseUrl = getEnvVar('IMAGE_FRONT_URL');
-        const profileImageUrl = baseUrl + profile.profile_image;
-        return { profileImageUrl };
     }
 }
