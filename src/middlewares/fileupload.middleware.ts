@@ -27,7 +27,7 @@ export class FileUploadMiddleware {
         next: NextFunction
     ) => {
         const multerMiddleware = createMulterMiddleware(PAYMENT_QR_CODE_PATH);
-        multerMiddleware.single("image")(req, res, (err) => {
+        multerMiddleware.single("paymentImage")(req, res, (err) => {
             if (err) {
                 return res.status(400).json({ message: "File upload failed", error: err });
             }

@@ -21,9 +21,14 @@ export const generateOtp = (digit: number) => {
     return Number(otp);
 };
 
-export const calculateAge = (dob: Date) => {
-    const today = new Date();
-    const age = today.getFullYear() - dob.getFullYear();
+export const calculateAge = (dob: string) => {
+    const dateOfBirth = new Date(dob); // Convert string to Date object
+
+    if (!(dateOfBirth instanceof Date) || isNaN(dateOfBirth.getTime())) {
+        throw new Error("Invalid date provided");
+    }
+
+    const age = moment().diff(moment(dateOfBirth), 'years'); // Calculate age using moment
     return age;
 };
 

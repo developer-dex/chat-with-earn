@@ -57,6 +57,7 @@ export class AuthController {
                     )
                 );
         } catch (error) {
+            console.log(error);
             return res
                 .status(200)
                 .send(
@@ -70,8 +71,9 @@ export class AuthController {
     };
 
     signup = async (req: Request, res: Response, next: NextFunction) => {
+        const paymentImage = req.file;
         const requestData: ISignupRequest = req.body;
-        
+        console.log("requestData",requestData);
         try {
             const isExistUser = await this.authService.isUserExist(
                 requestData.email
@@ -87,7 +89,7 @@ export class AuthController {
                         )
                     );
             }
-            const signUpToken = await this.authService.signUp(requestData);
+            const signUpToken = await this.authService.signUp(requestData, paymentImage);
             return res
                 .status(200)
                 .send(
@@ -99,6 +101,7 @@ export class AuthController {
                     )
                 );
         } catch (error) {
+            console.log("signup error",error);
             return res
                 .status(200)
                 .send(

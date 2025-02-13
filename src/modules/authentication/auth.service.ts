@@ -26,12 +26,14 @@ export class AuthService {
     login = async (userId: string, profileImageUrl: string): Promise<ILoginResponse> => {
         return this.generateLogInSignUpResponse(userId, profileImageUrl);
     };
-    public async signUp(signUpReqPayload: ISignupRequest) {
+    public async signUp(signUpReqPayload: ISignupRequest, paymentImage: Express.Multer.File) {
+        console.log(signUpReqPayload);
         // TODO: implement full signup feature;
-        const currentAge = calculateAge(signUpReqPayload.dob);
+        const currentAge = calculateAge(signUpReqPayload.dob.toString());
         await User.create({
             ...signUpReqPayload,
             age: currentAge,
+            payment_qr_code: paymentImage.path,
         });
     }
 

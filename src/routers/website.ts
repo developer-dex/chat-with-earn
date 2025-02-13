@@ -32,7 +32,8 @@ WebsiteApi.post(
 
 WebsiteApi.post(
     "/signup",
-    validator.body(signupRequestSchema),
+    fileUploadMiddleware.uploadPaymentQrCode,
+    // validator.body(signupRequestSchema),
     authController.signup
 );
 

@@ -5,7 +5,12 @@ import ChatMessage from "../../models/ChatMessage"; // Import ChatMessage model
 export class FriendService {
     friendList = async (userId: string) => {
         console.log(userId);    
-        const messages = await ChatMessage.find({}); // Fetch all chat messages
+        const messages = await ChatMessage.find({
+            $or: [
+                { senderId: userId },
+                { receiverId: userId }
+            ]
+        }); // Fetch chat messages where userId is either sender or receiver
 
         // Fetch users based on senderId and receiverId
         const userIds = [...new Set(messages.flatMap(message => [message.senderId, message.receiverId]))]; // Get unique userIds
