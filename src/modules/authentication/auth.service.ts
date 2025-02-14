@@ -99,7 +99,7 @@ export class AuthService {
         return await ResetPassword.findOne({ token });
     };
 
-    passwordMatch = async (password: string, hashedPassword: string) => {
+    passwordMatch = (password: string, hashedPassword: string) => {
         return bcryptjs.compareSync(password, hashedPassword);
     };
 

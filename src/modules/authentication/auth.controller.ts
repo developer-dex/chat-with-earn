@@ -31,6 +31,7 @@ export class AuthController {
                 requestData.password,
                 isExistUser.password
             );
+            console.log("isPasswordCorrect", isPasswordCorrect)
             if (!isPasswordCorrect) {
                 return res
                     .status(StatusCodes.OK)
