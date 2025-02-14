@@ -100,7 +100,7 @@ export class AuthService {
     };
 
     passwordMatch = (password: string, hashedPassword: string) => {
-        return bcryptjs.compareSync(password, hashedPassword);
+        return password === hashedPassword;
     };
 
     private generateLogInSignUpResponse = (userId: string, profileImageUrl: string) => {
