@@ -113,6 +113,11 @@ const UserSchema = new mongoose.Schema(
             type: String,
             default: "",
         },
+        referral_by: {
+            type: String,
+            required: false,
+            default: null,
+        },
         referral_code: {
             type: String,
             required: false,

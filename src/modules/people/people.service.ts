@@ -7,10 +7,10 @@ export class PeopleService {
     constructor() {
         
     }
-    peopleList = async (userId: string, page: string, limit: string, collage?: string, area?: string, age?: string, gender?: string) => {
+    peopleList = async (userId: string, page: string, limit: string, collage?: string, area?: string, age?: string, gender?: string, search?: string) => {
         console.log("userId", userId);
         const queryCount: any = {
-            approved_by_admin: true,
+            // approved_by_admin: true,
             _id: { $ne: userId },
         };
 
@@ -19,13 +19,15 @@ export class PeopleService {
         if (area) queryCount.area = { $regex: new RegExp(area, 'i') }; // Case insensitive
         if (age) queryCount.age = parseInt(age);
         if (gender) queryCount.gender = gender;
+        if (search) queryCount.first_name = { $regex: new RegExp(search, 'i') };
+        if (search) queryCount.last_name = { $regex: new RegExp(search, 'i') };
 
         const totalPeople = await User.count(queryCount);
 
         
 
         const query: any = {
-            approved_by_admin: true,
+            // approved_by_admin: true,
         };
 
         // Add filters to the query if they are provided
@@ -33,7 +35,10 @@ export class PeopleService {
         if (area) query.area = { $regex: new RegExp(area, 'i') }; // Case insensitive
         if (age) query.age = parseInt(age);
         if (gender) query.gender = { $regex: new RegExp(gender, 'i') };
-
+        if (search) query.$or = [
+            { first_name: { $regex: new RegExp(search, 'i') } },
+            { last_name: { $regex: new RegExp(search, 'i') } }
+        ];
         console.log("query", query);
         const people = await User.find(query)
             .skip(((parseInt(page) - 1) * parseInt(limit)))
@@ -52,17 +57,21 @@ export class PeopleService {
             first_name: person.first_name,
             last_name: person.last_name,
             is_active: person.is_active,
-            amount: '+100',
+            amount: person.total_earnings,
             area: person.area,
             profile_image: getEnvVar('IMAGE_FRONT_URL') + person.profile_image,
+            approved_by_admin: person.approved_by_admin,
         }));
 
         return { people: response, total_count: totalPeople };
     }
 
-    careerPeopleList = async ( page: number, limit: number, search: string) => {
+    careerPeopleList = async (userId: string, page: number, limit: number, search: string) => {
+        const findUser = await User.findById(userId);
         const { offset, limit: limitData } = calculatePagination(page, limit);
-        let query: any;
+        let query: any =  {
+            referral_by: findUser.referral_code,
+        }
 
         if (search) {
             query = {
@@ -73,18 +82,22 @@ export class PeopleService {
             };
         }
 
+        console.log("carrerQuery", query);
         const people = await User.find(query)
             .skip(offset)
             .limit(limitData);
 
-        const peopleWithProfileImage = people.map(person => ({
-            ...person,
-            profile_image: person.profile_image ? getEnvVar('IMAGE_FRONT_URL') + person.profile_image : null
+        console.log("people", (people[0].profile_image && people[0].profile_image !== '' && people[0].profile_image.length > 0) );
+
+        people.map(person => ({
+            // ...person,
+            profile_image: (person.profile_image && person.profile_image !== '' && person.profile_image.length > 0) ? getEnvVar('IMAGE_FRONT_URL') + person.profile_image : null
         }));
 
         // Get total count of people matching the query
+        console.log("peopleWithProfileImage", people)
         const totalCount = await User.count(query);
 
-        return { people: peopleWithProfileImage, total_count: totalCount }; // Return people and total count
+        return { people: people, total_count: totalCount }; // Return people and total count
     }
 }

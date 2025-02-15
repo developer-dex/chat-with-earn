@@ -12,8 +12,9 @@ export interface ISignupRequest {
     collage_name: string;
     area: string;
     phone: string;
+    referral_code: string;
+    password: string;
 }
-
 
 export interface ILoginResponse {
     authorization_token: string;

@@ -14,8 +14,8 @@ export class PeopleController {
     people = async(req: Request & { token_payload?: any }, res: Response, next: NextFunction) => {
         try {
             const token_payload = req.token_payload;
-            const { page, limit, collage, area, age, gender } = req.query;
-            const people = await this.peopleService.peopleList(token_payload.data._id, page as string, limit as string, collage as string, area as string, age as string, gender as string);
+            const { page, limit, collage, area, age, gender, search  } = req.query;
+            const people = await this.peopleService.peopleList(token_payload.data._id, page as string, limit as string, collage as string, area as string, age as string, gender as string, search as string);
             return res
                 .status(200)
                 .send(
@@ -32,10 +32,11 @@ export class PeopleController {
         }
     }
 
-    careerPeopleList = async(req: Request, res: Response, next: NextFunction) => {
+    careerPeopleList = async(req: Request & { token_payload?: any }, res: Response, next: NextFunction) => {
         try {
             const { page, limit, search  } = req.query;
-            const people = await this.peopleService.careerPeopleList(Number(page), Number(limit), search as string);
+            const token_payload = req.token_payload;
+            const people = await this.peopleService.careerPeopleList(token_payload.data._id, Number(page), Number(limit), search as string);
             return res
                 .status(200)
                 .send(

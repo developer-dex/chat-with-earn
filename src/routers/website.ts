@@ -67,7 +67,7 @@ WebsiteApi.get("/messages", authMiddleware.verifyjwtToken, friendController.getM
 
 WebsiteApi.get("/people", authMiddleware.verifyjwtToken, peopleController.people);
 
-WebsiteApi.get("/career-people-list", peopleController.careerPeopleList);
+WebsiteApi.get("/career-people-list", authMiddleware.verifyjwtToken, peopleController.careerPeopleList);
 
 WebsiteApi.patch("/update-profile", authMiddleware.verifyjwtToken, fileUploadMiddleware.uploadUserProfile, profileController.updateProfile);
 

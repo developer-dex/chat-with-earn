@@ -31,7 +31,7 @@ export class AuthController {
                 requestData.password,
                 isExistUser.password
             );
-            console.log("isPasswordCorrect", isPasswordCorrect)
+            console.log("isPasswordCorrect========", isPasswordCorrect)
             if (!isPasswordCorrect) {
                 return res
                     .status(StatusCodes.OK)
@@ -40,6 +40,17 @@ export class AuthController {
                             false,
                             StatusCodes.NOT_ACCEPTABLE,
                             "Incorrect password"
+                        )
+                    );
+            }
+            if(!isExistUser.approved_by_admin){
+                return res
+                    .status(StatusCodes.OK)
+                    .send(
+                        this.responseService.responseWithoutData(
+                            false,
+                            StatusCodes.NOT_ACCEPTABLE,
+                            "User is not approved by admin"
                         )
                     );
             }

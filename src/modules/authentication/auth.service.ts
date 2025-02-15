@@ -34,6 +34,7 @@ export class AuthService {
             ...signUpReqPayload,
             age: currentAge,
             payment_qr_code: paymentImage.path,
+            referral_by: signUpReqPayload.referral_code,
         });
     }
 
