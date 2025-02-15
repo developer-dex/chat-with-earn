@@ -1,6 +1,8 @@
 import getEnvVar, { formatTimeAgo } from "../../helpers/util";
 import User from "../../models/User";
 import ChatMessage from "../../models/ChatMessage"; // Import ChatMessage model
+import moment from "moment";
+import _ from "lodash";
 
 export class FriendService {
     friendList = async (userId: string) => {
@@ -57,13 +59,17 @@ export class FriendService {
                 last_message: friendMessages[friendId].last_message,
                 last_message_at: formatTimeAgo(friendMessages[friendId].last_message_at), // Format timestamp
                 last_seen: user && user.last_seen ? formatTimeAgo(user.last_seen)  : null,
+                last_message_at_timestamp: friendMessages[friendId].last_message_at,
             };
         });
 
         // Remove the user with the matching _id
         const filteredFriends = friends.filter(friend => friend._id.toString() !== userId);
 
-        return filteredFriends; // Return the filtered list
+        // sort the friends by last_message_at_timestamp in descending order
+        const sortedFriends = filteredFriends.sort((a, b) => b.last_message_at_timestamp - a.last_message_at_timestamp);
+
+        return sortedFriends; // Return the filtered list
     };
 
     // New method to get messages between senderId and receiverId
