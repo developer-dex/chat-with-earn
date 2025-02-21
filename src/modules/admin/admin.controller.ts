@@ -112,5 +112,16 @@ export class AdminController {
             return res.status(200).send(this.responseService.responseWithoutData(false, StatusCodes.INTERNAL_SERVER_ERROR, "Internal server error"));
         }
     }
+
+    deleteUser = async (req: Request & { token_payload?: any }, res: Response, next: NextFunction) => {
+        const token_payload = req.token_payload;
+        const { userId } = req.body;
+        try {
+            const user = await this.adminService.deleteUser(userId);
+            return res.status(200).send(this.responseService.responseWithData(false, StatusCodes.OK, "User deleted successfully", user));
+        } catch (error) {
+            return res.status(200).send(this.responseService.responseWithoutData(false, StatusCodes.INTERNAL_SERVER_ERROR, "Internal server error"));
+        }
+    }
 }
 export const adminController = new AdminController();

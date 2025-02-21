@@ -118,6 +118,11 @@ const UserSchema = new mongoose.Schema(
             required: false,
             default: null,
         },
+        payment_qr_code: {
+            type: String,
+            required: false,
+            default: null,
+        },
         referral_code: {
             type: String,
             required: false,

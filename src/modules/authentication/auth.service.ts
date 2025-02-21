@@ -27,7 +27,7 @@ export class AuthService {
         return this.generateLogInSignUpResponse(userId, profileImageUrl);
     };
     public async signUp(signUpReqPayload: ISignupRequest, paymentImage: Express.Multer.File) {
-        console.log(signUpReqPayload);
+        console.log("paymentImage____",paymentImage);
         // TODO: implement full signup feature;
         const currentAge = calculateAge(signUpReqPayload.dob.toString());
         await User.create({

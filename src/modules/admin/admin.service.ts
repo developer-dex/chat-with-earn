@@ -15,6 +15,11 @@ export class AdminService {
     users = async (page: number, limit: number) => {
         const skip = (page - 1) * limit;
         const users = await User.find({}).skip(skip).limit(limit);
+
+        // add base url to the payment qr code
+        users.forEach(user => {
+            user.payment_qr_code = `${process.env.IMAGE_FRONT_URL}${user.payment_qr_code}`;
+        });
         // return the total count of the users
         const totalCount = await User.countDocuments({});
         return { users, total_count: totalCount };
@@ -57,6 +62,11 @@ export class AdminService {
         const baseUrl = process.env.IMAGE_FRONT_URL;
         qrCode.qr_code_image = `${baseUrl}/${qrCode?.qr_code_image}`;
         return qrCode;
+    }
+
+    deleteUser = async (userId: string) => {
+        const user = await User.findByIdAndDelete(userId);
+        return user;
     }
 
     isExist = async (userId: string) => {

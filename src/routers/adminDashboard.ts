@@ -16,5 +16,6 @@ AdminDashboardApi.patch("/change-status", adminController.chnageTheStatus);
 AdminDashboardApi.patch("/edit-user-profile", adminController.editUserProfile);
 AdminDashboardApi.patch("/change-payment-qr-code", fileUploadMiddleware.uploadPaymentQrCode, adminController.changeThePaymentQrCode);
 AdminDashboardApi.get("/payment-photo", adminController.getPaymentPhoto);
+AdminDashboardApi.post("/delete-user", adminController.deleteUser);
 
 export default AdminDashboardApi;

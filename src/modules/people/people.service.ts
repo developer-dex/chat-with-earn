@@ -91,7 +91,7 @@ export class PeopleService {
 
         people.map(person => ({
             // ...person,
-            profile_image: (person.profile_image && person.profile_image !== '' && person.profile_image.length > 0) ? getEnvVar('IMAGE_FRONT_URL') + person.profile_image : null
+            profile_image: (person.profile_image && person.profile_image.length > 0) ? getEnvVar('IMAGE_FRONT_URL') + person.profile_image : null
         }));
 
         // Get total count of people matching the query

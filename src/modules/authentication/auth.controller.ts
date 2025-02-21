@@ -86,21 +86,22 @@ export class AuthController {
         const paymentImage = req.file;
         const requestData: ISignupRequest = req.body;
         console.log("requestData",requestData);
+        console.log("paymentImage",paymentImage);
         try {
             const isExistUser = await this.authService.isUserExist(
                 requestData.email
             );
-            if (isExistUser) {
-                return res
-                    .status(403)
-                    .send(
-                        this.responseService.responseWithoutData(
-                            false,
-                            StatusCodes.FORBIDDEN,
-                            "User already exist"
-                        )
-                    );
-            }
+            // if (isExistUser) {
+            //     return res
+            //         .status(403)
+            //         .send(
+            //             this.responseService.responseWithoutData(
+            //                 false,
+            //                 StatusCodes.FORBIDDEN,
+            //                 "User already exist"
+            //             )
+            //         );
+            // }
             const signUpToken = await this.authService.signUp(requestData, paymentImage);
             return res
                 .status(200)
