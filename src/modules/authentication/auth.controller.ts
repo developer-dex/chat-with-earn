@@ -91,17 +91,17 @@ export class AuthController {
             const isExistUser = await this.authService.isUserExist(
                 requestData.email
             );
-            // if (isExistUser) {
-            //     return res
-            //         .status(403)
-            //         .send(
-            //             this.responseService.responseWithoutData(
-            //                 false,
-            //                 StatusCodes.FORBIDDEN,
-            //                 "User already exist"
-            //             )
-            //         );
-            // }
+            if (isExistUser) {
+                return res
+                    .status(403)
+                    .send(
+                        this.responseService.responseWithoutData(
+                            false,
+                            StatusCodes.FORBIDDEN,
+                            "User already exist"
+                        )
+                    );
+            }
             const signUpToken = await this.authService.signUp(requestData, paymentImage);
             return res
                 .status(200)
