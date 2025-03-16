@@ -137,6 +137,11 @@ export class AuthController {
             const isExistUser = await this.authService.isUserExist(
                 requestData.email
             );
+            if(!isExistUser){
+                return res
+                    .status(200)
+                    .send(this.responseService.responseWithoutData(false, StatusCodes.FORBIDDEN, "User does not exist"));
+            }
             const tempData = await this.authService.forgetPassword(requestData, isExistUser._id);
             return res
                 .status(200)

@@ -23,11 +23,5 @@ export const forgetPasswordRequestSchema = Joi.object({
 
 export const resetPasswordRequestSchema = Joi.object({
     new_password: Joi.string().min(8).required(),
-    confirm_password: Joi.string().min(8).required(),
-    reset_password_token: Joi.string().required(),
-}).with('new_password', 'confirm_password').custom((value, helpers) => {
-    if (value.new_password === value.confirm_password) {
-        return value;
-    }
-    return helpers.error('any.invalid', { message: 'New Passwords and Confirm Password do not match' });
-});
+    reset_password_token: Joi.string().required()
+})

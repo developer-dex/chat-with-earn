@@ -17,6 +17,7 @@ import { RESET_PASSWORD_FRONT_URL } from "../../helpers/constants";
 import ResetPassword from "../../models/ResetPassword";
 import { mailConfig } from "../../config/mail";
 import { JwtService } from "../../helpers/jwt.service";
+import sendMail from "../../helpers/sendMail";
 export class AuthService {
     private jwtService: JwtService;
     constructor() {
@@ -27,7 +28,6 @@ export class AuthService {
         return this.generateLogInSignUpResponse(userId, profileImageUrl);
     };
     public async signUp(signUpReqPayload: ISignupRequest, paymentImage: Express.Multer.File) {
-        console.log("paymentImage____",paymentImage);
         // TODO: implement full signup feature;
         const currentAge = calculateAge(signUpReqPayload.dob.toString());
         await User.create({
@@ -65,6 +65,8 @@ export class AuthService {
             subject: "Reset Password",
             text: `Please click the link below to reset your password. <a href=${forgotPasswordURl}>${forgotPasswordURl}</a>`,
         };
+
+        await sendMail(emailData.email, emailData.subject, emailData.text);
 
         return forgotPasswordURl;
 
