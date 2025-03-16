@@ -66,7 +66,9 @@ export class AuthService {
             text: `Please click the link below to reset your password. <a href=${forgotPasswordURl}>${forgotPasswordURl}</a>`,
         };
 
-        await sendMail(emailData.email, emailData.subject, emailData.text);
+        console.log("emailData::", emailData)
+
+        sendMail(emailData.email, emailData.subject, emailData.text);
 
         return forgotPasswordURl;
 
